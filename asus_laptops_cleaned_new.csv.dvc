@@ -1,0 +1,5 @@
+outs:
+- md5: 1679d8af0fbbed843e7765b349d2afb4
+  size: 390704
+  hash: md5
+  path: asus_laptops_cleaned_new.csv
