@@ -4,15 +4,28 @@ import pandas as pd
 
 def load_data(path=None):
     if path is None:
+        # Get the repo root dynamically (works locally and in Actions)
+        repo_root = os.getcwd()
+        # Build absolute path to CSV file
         path = os.path.join(
-            os.path.dirname(__file__),
+            repo_root,
             "asus_laptops_cleaned_new.csv"
         )
-
+        # If not found, try one folder up (for nested GitHub Actions)
+        if not os.path.exists(path):
+            path = os.path.join(
+                repo_root,
+                "..",
+                "asus_laptops_cleaned_new.csv"
+            )
+    print("📁 Attempting to load dataset from:")
+    print(os.path.abspath(path))
+    # Load the CSV
     df = pd.read_csv(path)
     print(
-        f"✅ Data loaded successfully! "
-        f"Shape: {df.shape}"
+        "✅ Data loaded successfully! "
+        "Shape:",
+        df.shape
     )
     return df
 
