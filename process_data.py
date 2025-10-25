@@ -4,22 +4,28 @@ import pandas as pd
 
 def load_data(path=None):
     if path is None:
-        # Get the repo root dynamically (works locally and in Actions)
+        # Get the current working directory
         repo_root = os.getcwd()
-        # Build absolute path to CSV file
-        path = os.path.join(
-            repo_root,
-            "asus_laptops_cleaned_new.csv"
-        )
-        # If not found, try one folder up (for nested GitHub Actions)
-        if not os.path.exists(path):
-            path = os.path.join(
-                repo_root,
-                "..",
-                "asus_laptops_cleaned_new.csv"
+
+        # Try locating the dataset in common locations
+        possible_paths = [
+            os.path.join(repo_root, "asus_laptops_cleaned_new.csv"),
+            os.path.join(repo_root, "..", "asus_laptops_cleaned_new.csv"),
+            os.path.join(repo_root, "data", "asus_laptops_cleaned_new.csv")
+        ]
+
+        # Pick the first file that exists
+        path = next((p for p in possible_paths if os.path.exists(p)), None)
+
+        if not path:
+            raise FileNotFoundError(
+                "❌ Dataset 'asus_laptops_cleaned_new.csv' "
+                "not found in expected paths!"
             )
+
     print("📁 Attempting to load dataset from:")
     print(os.path.abspath(path))
+
     # Load the CSV
     df = pd.read_csv(path)
     print(
